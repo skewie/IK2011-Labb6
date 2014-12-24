@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Välkommen till brädspelsshoppen!</title>
+    </h:head>
+    <h1>Brädspelsshoppen</h1>
+    <h:link outcome="admin.xhtml" value="Admin" />
+    
+    <h:body>
+        <h:form id="tableForm"> 
+            <h:dataTable id="mainTable" value="${articleBean.articles}" var="article">
+                <h:column>
+                    <h:graphicImage url="${article.imageUrl}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Namn</f:facet>
+                    <h:inputText value="${article.name}" rendered="${article.editable}" ></h:inputText>
+                    <h:outputText value="${article.name}" rendered="${not article.editable}"></h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Publicerad</f:facet>
+                    <h:inputText value="${article.publishedYear}" rendered="${article.editable}" />
+                    <h:outputText value="${article.publishedYear}" rendered="${not article.editable}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Pris</f:facet>
+                    <h:inputText value="${article.price}" rendered="${article.editable}" />
+                    <h:outputText value="${article.price}" rendered="${not article.editable}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header"></f:facet>
+                    <h:commandLink id="removeLink" value="Köp" action="${cartBean.addArticle(article)}">
+                        <f:ajax render="@form" />
+                    </h:commandLink>
+                </h:column>
+            </h:dataTable>
+            <h:commandButton rendered="${articleBean.anyItemEditable}" value="Uppdatera alla" action="${articleBean.saveUpdatesAction()}">
+                <f:ajax render="@form" execute="@form" />
+            </h:commandButton>
+        </h:form>
+    </h:body>
+</html>
+

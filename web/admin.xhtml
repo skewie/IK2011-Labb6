@@ -34,10 +34,10 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header"></f:facet>
-                    <h:commandLink rendered="${not article.editable}" id="editLink" value="Redigera" action="${articleBean.enableEditAction()}">
+                    <h:commandLink rendered="${not article.editable}" id="editLink" value="Redigera" action="${articleBean.enableEditAction(article)}">
                         <f:ajax render="@form" />
                     </h:commandLink>
-                    <h:commandLink rendered="${article.editable}" id="cancelEditLink" value="Avbryt" action="${articleBean.enableEditAction()}">
+                    <h:commandLink rendered="${article.editable}" id="cancelEditLink" value="Avbryt" action="${articleBean.enableEditAction(article)}">
                         <f:ajax render="@form" />
                     </h:commandLink>
                 </h:column>
@@ -50,15 +50,31 @@
         <br />
         <h:form>
             <h2>Lägg till vara</h2>
-            <h:panelGrid columns="2">
+            <h:panelGrid columns="3">
                 <h:outputLabel value="Namn:" />
-                <h:inputText id="addFormName" value="${article.name}" />
+                <h:inputText id="addFormName" value="${article.name}" validator="${article.validateName}">
+                    <f:ajax event="blur" render="addFormNameError" />
+                </h:inputText>
+                <h:message for="addFormName" id="addFormNameError" style="color:red" />
+                
                 <h:outputLabel value="Publicerad (År):" />
-                <h:inputText id="addFormPublishedYear" value="${article.publishedYear}" />
+                <h:inputText id="addFormPublishedYear" value="${article.publishedYear}" validator="${article.validatePublishedYear}">
+                    <f:ajax event="blur" render="addFormPublishedYearError" />
+                </h:inputText>
+                <h:message for="addFormPublishedYear" id="addFormPublishedYearError" style="color:red" />
+                
                 <h:outputLabel value="Pris:" />
-                <h:inputText id="addFormPrice" value="${article.price}" />
+                <h:inputText id="addFormPrice" value="${article.price}" validator="${article.validatePrice}">
+                    <f:ajax event="blur" render="addFormPriceError" />
+                </h:inputText>
+                <h:message for="addFormPrice" id="addFormPriceError" style="color:red" />
+                
                 <h:outputLabel value="Bild URL:" />
-                <h:inputText id="addFormImageUrl" value="${article.imageUrl}" />
+                <h:inputText id="addFormImageUrl" value="${article.imageUrl}" validator="${article.validateImageUrl}">
+                    <f:ajax event="blur" render="addFormImageUrlError" />
+                </h:inputText>
+                <h:message for="addFormImageUrl" id="addFormImageUrlError" style="color:red" />
+                
                 <h:commandButton value="Lägg till" action="${articleBean.createAction(article)}">
                     <f:ajax render="@all" execute="@form" />
                 </h:commandButton>

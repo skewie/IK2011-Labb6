@@ -7,6 +7,10 @@ package model;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import util.messages.ErrorMessage;
+import util.messages.MessageHandler;
 
 /**
  *
@@ -57,6 +61,11 @@ public class Article implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+    
+    public void validateName(FacesContext context, UIComponent uic, Object value) {
+        String val = prepareStringValue(value);
+        performBasicValidation(context, uic, val);
+    }
 
     public double getPrice() {
         return price;
@@ -64,6 +73,18 @@ public class Article implements Serializable {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+    
+    public void validatePrice(FacesContext context, UIComponent uic, Object value) {
+        if (value == null)
+            return;
+        
+        try {
+            if ((Double)value < 0)
+                MessageHandler.throwErrorMessage(context, ErrorMessage.NEGATIVE_NUMBER);
+        } catch (NumberFormatException nfe) {
+            MessageHandler.throwErrorMessage(context, ErrorMessage.NOT_A_NUMBER);
+        }
     }
 
     public String getPublishedYear() {
@@ -74,11 +95,38 @@ public class Article implements Serializable {
         this.publishedYear = publishedYear;
     }
     
+    public void validatePublishedYear(FacesContext context, UIComponent uic, Object value) {
+        String val = prepareStringValue(value);
+        performBasicValidation(context, uic, value);
+        
+        try {
+            Integer.parseInt(val);
+        } catch(NumberFormatException nfe) {
+            MessageHandler.throwErrorMessage(context, ErrorMessage.NOT_A_YEAR);
+        }
+        
+        if (val.length() != 4)
+            MessageHandler.throwErrorMessage(context, ErrorMessage.NOT_A_YEAR);
+    }
+    
     public String getImageUrl() {
         return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }  
+    }
+    
+    public void validateImageUrl(FacesContext context, UIComponent uic, Object value) {
+    }
+    
+    private void performBasicValidation(FacesContext context, UIComponent uic, Object value) {
+        if (value.equals(""))
+            MessageHandler.throwErrorMessage(context, ErrorMessage.EMPTY_FIELD);
+    }
+    
+    private String prepareStringValue(Object value) {
+        String val = (String)value;
+        return val.trim();
+    }
 }

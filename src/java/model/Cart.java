@@ -89,7 +89,7 @@ public class Cart {
     }
     
     public void setRowAmount(Article article, int amount) {
-        if (amount <= 0) {
+        if (amount <= 0) { // Reduceras det till noll eller mindre tar vi bort varan helt.
             removeArticle(article);
         } else {
             for (CartRow row : cartRows) {

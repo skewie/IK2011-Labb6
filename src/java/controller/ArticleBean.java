@@ -22,7 +22,6 @@ import model.Article;
 public class ArticleBean implements Serializable {
     private ArrayList<Article> articles = null;
     private ArticleDAO dao;
-    private boolean dbUpdated = false;
     
     /**
      * Creates a new instance of ArticleBean
@@ -99,8 +98,8 @@ public class ArticleBean implements Serializable {
      * @return 
      */
     public String deleteArticle(Article article) {
+        articles.remove(article);
         dao.deleteArticle(article.getArticleId());
-        dbUpdated = true;
         return null;
     }
     

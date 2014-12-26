@@ -122,6 +122,7 @@ public class ArticleDAO implements Serializable {
             con.commit();
             return result.length > 0;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
             return false;
         }
     }
@@ -143,6 +144,7 @@ public class ArticleDAO implements Serializable {
             con.commit();
             return result;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
             return false;
         }
     }
@@ -156,7 +158,7 @@ public class ArticleDAO implements Serializable {
         } catch (SQLNonTransientConnectionException ntce) { // om anslutningen dött ut.
             this.connect();
             return this.getArticles();
-        }
+        } 
     }
 
     public ArrayList<Article> searchArticles(String name) throws SQLException {

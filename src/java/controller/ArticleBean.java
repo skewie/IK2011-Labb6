@@ -30,7 +30,11 @@ public class ArticleBean implements Serializable {
         try {
             dao = ArticleDAO.getInstance();
         } catch (Exception e) {
-            
+            System.out.println(e.getClass()+" - "+e.getMessage());
+            System.out.println("StackTrace:");
+            for (StackTraceElement ste : e.getStackTrace()) {
+                System.out.println(ste.toString());
+            }
         }
     }
     
@@ -47,12 +51,11 @@ public class ArticleBean implements Serializable {
                 // Hade vi hämtat från databasen utan modifikation skulle "Editable" alltid vara false, eftersom referenserna skapas om på nytt vid varje request (även ajax).
                 // I övrigt måste vi göra det på detta vis eftersom att en uppdatering kan ha skett i en annan session än den egna.
                 // Mycket krångel för att få "Editable"-funktionen att fungera...
-                articles = this.getValueMergedArticles(articles);
+                articles = this.getValueMergedArticles();
             } else {
                 articles = dao.getArticles();
             }
             return articles;
-
         } catch(SQLException sqle) {
             return null;
         }
@@ -67,11 +70,11 @@ public class ArticleBean implements Serializable {
      * @param localList
      * @return Artikel med korrekta värden för "editable" variabeln.
      */
-    private ArrayList<Article> getValueMergedArticles(ArrayList<Article> localList) throws SQLException {
+    private ArrayList<Article> getValueMergedArticles() throws SQLException {
         ArrayList<Article> dbList = dao.getArticles();
         for (Article art1 : dbList)
         {
-            for (Article art2 : localList) {
+            for (Article art2 : articles) {
                 if (this.isEqual(art1, art2))
                     art1.setEditable(art2.isEditable());
             }

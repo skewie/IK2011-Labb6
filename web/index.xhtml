@@ -9,6 +9,7 @@
     </h:head>
     <h1>Brädspelsshoppen</h1>
     <h:link outcome="admin.xhtml" value="Admin" />
+    <h:link outcome="cart.xhtml" value="Kundvagn" />
     
     <h:body>
         <h:form id="tableForm"> 
@@ -18,18 +19,15 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">Namn</f:facet>
-                    <h:inputText value="${article.name}" rendered="${article.editable}" ></h:inputText>
-                    <h:outputText value="${article.name}" rendered="${not article.editable}"></h:outputText>
+                    <h:outputText style="" value="${article.name}"></h:outputText>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Publicerad</f:facet>
-                    <h:inputText value="${article.publishedYear}" rendered="${article.editable}" />
-                    <h:outputText value="${article.publishedYear}" rendered="${not article.editable}" />
+                    <h:outputText value="${article.publishedYear}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header">Pris</f:facet>
-                    <h:inputText value="${article.price}" rendered="${article.editable}" />
-                    <h:outputText value="${article.price}" rendered="${not article.editable}" />
+                    <h:outputText value="${article.price}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header"></f:facet>

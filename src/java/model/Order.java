@@ -5,7 +5,7 @@
  */
 package model;
 
-import java.sql.Date;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,12 +14,6 @@ import java.sql.Date;
 public class Order {
     private String firstName;
     private String lastName;
-    private String addressLineOne;
-    private String addressLineTwo;
-    private String postalCode;
-    private String city;
-    private Date datePlaced;
-    private Cart cart;
-    
+    private ArrayList<OrderRow> rows;
     
 }

@@ -27,6 +27,11 @@
                     <h:outputText value="${article.price}" rendered="${not article.editable}" />
                 </h:column>
                 <h:column>
+                    <f:facet name="header">Bild URL</f:facet>
+                    <h:inputText value="${article.imageUrl}" rendered="${article.editable}" />
+                    <h:outputText value="${article.imageUrl}" rendered="${not article.editable}" />
+                </h:column>
+                <h:column>
                     <f:facet name="header"></f:facet>
                     <h:commandLink id="removeLink" value="Ta bort" action="${articleBean.deleteArticle(article)}">
                         <f:ajax render="@form" />

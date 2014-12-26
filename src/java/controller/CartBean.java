@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package controller;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import model.Article;
+import model.OrderRow;
 
 /**
  *
@@ -16,18 +18,18 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean(name = "cartBean")
 @SessionScoped
-public class Cart {
-    private ArrayList<CartRow> cartRows;
+public class CartBean {
+    private ArrayList<OrderRow> cartRows;
 
-    public Cart() {
+    public CartBean() {
         cartRows = new ArrayList();
     }
 
-    public Cart(ArrayList<CartRow> cartRows) {
+    public CartBean(ArrayList<OrderRow> cartRows) {
         this.cartRows = cartRows;
     }
 
-    public ArrayList<CartRow> getCartRows() {
+    public ArrayList<OrderRow> getCartRows() {
         return cartRows;
     }
 
@@ -35,7 +37,7 @@ public class Cart {
         if (inCart(article.getArticleId())) {
             increaseItemAmount(article.getArticleId());
         } else {
-            cartRows.add(new CartRow(article));
+            cartRows.add(new OrderRow(article));
         }
     }
     
@@ -51,7 +53,7 @@ public class Cart {
     }
     
     public boolean inCart(int articleId) {
-        for (CartRow row : cartRows) {
+        for (OrderRow row : cartRows) {
             if (row.getArticle().getArticleId() == articleId) {
                 return true;
             }
@@ -69,7 +71,7 @@ public class Cart {
     }
     
     public void increaseItemAmount(int articleId) {
-        for (CartRow row : cartRows) {
+        for (OrderRow row : cartRows) {
             if (row.getArticle().getArticleId() == articleId) {
                 row.increaseAmount();
                 break;
@@ -78,7 +80,7 @@ public class Cart {
     }
     
     public void reduceItemAmount(int articleId) {
-        for (CartRow row : cartRows) {
+        for (OrderRow row : cartRows) {
             if (row.getArticle().getArticleId() == articleId) {
                 row.reduceAmount();
                 if(row.getAmount() <= 0)
@@ -92,7 +94,7 @@ public class Cart {
         if (amount <= 0) { // Reduceras det till noll eller mindre tar vi bort varan helt.
             removeArticle(article);
         } else {
-            for (CartRow row : cartRows) {
+            for (OrderRow row : cartRows) {
                 if (row.getArticle().getArticleId() == article.getArticleId()) {
                     row.setAmount(amount);
                     break;
@@ -104,7 +106,7 @@ public class Cart {
     public int getCartTotalItems() {
         int tot = 0;
         
-        for (CartRow row : cartRows) {
+        for (OrderRow row : cartRows) {
             tot += row.getAmount();
         }
         
@@ -114,7 +116,7 @@ public class Cart {
     public String getCartTotalPrice() {
         double tot = 0.0;
         
-        for (CartRow row : cartRows) {
+        for (OrderRow row : cartRows) {
             tot += row.getAmount() * row.getArticle().getPrice();
         }
         

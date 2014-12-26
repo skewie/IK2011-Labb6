@@ -9,19 +9,19 @@ package model;
  *
  * @author Jeff
  */
-public class CartRow {
+public class OrderRow {
     private Article article;
     private int amount;
 
-    public CartRow() {
+    public OrderRow() {
     }
     
-    public CartRow(Article article) {
+    public OrderRow(Article article) {
         this.article = article;
         this.amount = 1;
     }
     
-    public CartRow(Article article, int amount) {
+    public OrderRow(Article article, int amount) {
         this.article = article;
         this.amount = amount;
     }

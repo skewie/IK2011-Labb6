@@ -85,6 +85,9 @@
                                     </h:commandLink>
                                 </h:column>
                             </h:dataTable>
+                            <h:outputText value="Total Summa: ${cartBean.cartTotalPrice}"/>
+                            <br/>
+                            <br/>
                             <h:commandLink rendered="${cartBean.cartNotEmpty}" action="${cartBean.checkOut()}">
                                 <b:button value="Checka Ut" look="primary"/>
                             </h:commandLink>

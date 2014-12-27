@@ -200,7 +200,7 @@ public class ArticleDAO implements Serializable {
 
         //lägger till rader till order med nyckel id från orderlist
         for(OrderRow row : orderrow){
-            PreparedStatement stmt = con.prepareStatement(" INSERT INTO order (list_id, id, amount) VALUES (?, ?, ?) ");
+            PreparedStatement stmt = con.prepareStatement(" INSERT INTO orderrow (list_id, id, amount) VALUES (?, ?, ?) ");
             stmt.setInt(1, id);
             stmt.setInt(2, row.getArticle().getArticleId());
             stmt.setInt(3, row.getAmount());

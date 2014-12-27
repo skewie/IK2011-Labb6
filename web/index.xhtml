@@ -8,12 +8,19 @@
     <h:head>
         <title>Välkommen till brädspelsshoppen!</title>
     </h:head>
-    <h1>Brädspelsshoppen</h1>
-    <h:link outcome="admin.xhtml" value="Admin" />
+    <!--<h1>Brädspelsshoppen</h1>
+    <h:link outcome="admin.xhtml" value="Admin" />-->
     <!-- Kundvagn visas på samma sida -->
     <!--<h:link outcome="cart.xhtml" value="Kundvagn" />-->
     
     <h:body>
+        <b:navBar brand="Brädspelsshopen" brandHref="#" inverse="true">
+            <b:navbarLinks>
+                <b:navLink value="Huvudsidan" href="./"></b:navLink>
+                <b:navLink value="Administration" outcome="admin.xhtml"></b:navLink>          
+            </b:navbarLinks>
+        </b:navBar>
+        <br/>
         <b:container>
                 <b:column col-lg="6" col-md="6" col-xs="12">
                     <b:panel title="Varor">
@@ -47,6 +54,7 @@
                         </h:form>
                     </b:panel>
                 </b:column>
+            
                 <b:column col-lg="6" col-sm="6" col-xs="12">
                     <b:panel title="Kundvagn">
                         <h:form id="cartForm">

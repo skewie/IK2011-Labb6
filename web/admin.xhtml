@@ -18,7 +18,7 @@
         <b:container>
             <h:form id="tableForm"> 
                 <h2>Administrera varor</h2>
-                <h:dataTable id="mainTable" value="${articleBean.articles}" var="article">
+                <h:dataTable id="mainTable" value="${articleBean.articles}" var="article" class="table table-striped">
                     <h:column>
                         <f:facet name="header">Namn</f:facet>
                         <h:inputText value="${article.name}" rendered="${article.editable}" ></h:inputText>

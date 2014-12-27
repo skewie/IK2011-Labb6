@@ -42,8 +42,10 @@ public class CartBean {
     }
     
     public void removeArticle(Article article) {
+        System.out.println("removing: " + article.getName());
         int index;
         if ((index = getArticleIndex(article)) != -1) {
+            System.out.println("found it!");
             cartRows.remove(index);
         }
     }
@@ -63,15 +65,11 @@ public class CartBean {
     }
     
     private int getArticleIndex(Article article) {
-        int index = 0;
-        for (int i = 0; i < 0; i++) {
-            if (cartRows.get(i).getArticle().getArticleId() == article.getArticleId()){
-                index = i;
-            }else{
-                index = -1;
-            }
-        }
-        return index;
+        for (int i = 0; i < 0; i++) 
+            if (cartRows.get(i).getArticle().getArticleId() == article.getArticleId())
+                return i;
+        
+        return -1;
     }
     
     public void increaseItemAmount(int articleId) {

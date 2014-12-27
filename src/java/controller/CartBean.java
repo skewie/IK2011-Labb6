@@ -5,6 +5,7 @@
  */
 package controller;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
@@ -18,8 +19,8 @@ import model.OrderRow;
  */
 @ManagedBean(name = "cartBean")
 @SessionScoped
-public class CartBean {
-    private ArrayList<OrderRow> cartRows;
+public class CartBean implements Serializable{
+    private final ArrayList<OrderRow> cartRows;
 
     public CartBean() {
         cartRows = new ArrayList();
@@ -43,10 +44,13 @@ public class CartBean {
     
     public void removeArticle(Article article) {
         System.out.println("removing: " + article.getName());
-        int index;
+        int index = 0;
+        System.out.println("cart size: " + cartRows.size());
         if ((index = getArticleIndex(article)) != -1) {
             System.out.println("found it!");
             cartRows.remove(index);
+        }else{
+            System.out.println("pointing at index: " + index);
         }
     }
     

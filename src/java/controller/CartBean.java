@@ -5,7 +5,9 @@
  */
 package controller;
 
+import DAO.ArticleDAO;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
@@ -20,10 +22,21 @@ import model.OrderRow;
 @ManagedBean(name = "cartBean")
 @SessionScoped
 public class CartBean implements Serializable{
+    
     private final ArrayList<OrderRow> cartRows;
-
+    private ArticleDAO dao;
+    
     public CartBean() {
         cartRows = new ArrayList();
+        try {
+            dao = ArticleDAO.getInstance();
+        } catch (Exception e) {
+            System.out.println(e.getClass()+" - "+e.getMessage());
+            System.out.println("StackTrace:");
+            for (StackTraceElement ste : e.getStackTrace()) {
+                System.out.println(ste.toString());
+            }
+        }
     }
 
     public CartBean(ArrayList<OrderRow> cartRows) {
@@ -69,7 +82,7 @@ public class CartBean implements Serializable{
     }
     
     private int getArticleIndex(Article article) {
-        for (int i = 0; i < 0; i++) 
+        for (int i = 0; i < cartRows.size(); i++) 
             if (cartRows.get(i).getArticle().getArticleId() == article.getArticleId())
                 return i;
         
@@ -129,8 +142,14 @@ public class CartBean implements Serializable{
         return NumberFormat.getCurrencyInstance().format(tot);
     }
     
-    public void checkOut(){
-        
+    public String checkOut(){
+        try{
+            dao.addToOrder(cartRows);
+            //cartRows.clear();
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return "";
     }
     
     public boolean isCartNotEmpty(){

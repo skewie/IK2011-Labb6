@@ -14,7 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
 import java.util.ArrayList;
+import java.util.Random;
 import model.Article;
+import model.OrderRow;
 
 /**
  *
@@ -186,4 +188,24 @@ public class ArticleDAO implements Serializable {
         }
         return list;
     }
+    
+    public void addToOrder(ArrayList<OrderRow> orderrow) throws SQLException{
+        //skapar nyckel id rad till orderlist
+        //temp test innan username
+        Random rnd = new Random();
+        int id = rnd.nextInt(10000)+1;
+        
+        PreparedStatement orderListId = con.prepareStatement(" INSERT INTO order_list (list_id) VALUES ("+id+") ");
+        orderListId.executeQuery();
+
+        //lägger till rader till order med nyckel id från orderlist
+        for(OrderRow row : orderrow){
+            PreparedStatement stmt = con.prepareStatement(" INSERT INTO order (list_id, id, amount) VALUES (?, ?, ?) ");
+            stmt.setInt(1, id);
+            stmt.setInt(2, row.getArticle().getArticleId());
+            stmt.setInt(3, row.getAmount());
+            stmt.executeQuery();
+        }
+    }
+    
 }

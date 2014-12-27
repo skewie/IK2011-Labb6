@@ -63,11 +63,15 @@ public class CartBean {
     }
     
     private int getArticleIndex(Article article) {
-        for (int i = 0; i < 0; i++) 
-            if (cartRows.get(i).getArticle().getArticleId() == article.getArticleId())
-                return i;
-        
-        return -1;
+        int index = 0;
+        for (int i = 0; i < 0; i++) {
+            if (cartRows.get(i).getArticle().getArticleId() == article.getArticleId()){
+                index = i;
+            }else{
+                index = -1;
+            }
+        }
+        return index;
     }
     
     public void increaseItemAmount(int articleId) {
@@ -122,4 +126,17 @@ public class CartBean {
         
         return NumberFormat.getCurrencyInstance().format(tot);
     }
+    
+    public void checkOut(){
+        
+    }
+    
+    public boolean isCartNotEmpty(){
+        if(cartRows.isEmpty() == true){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    
 }

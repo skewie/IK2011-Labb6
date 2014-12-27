@@ -5,14 +5,13 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui">
+    <!-- 
+    Layout supported by Bootsfaces. A Bootstrap for your JSF2! Source:
+    http://www.bootsfaces.net/page/index.xhtml 
+    -->
     <h:head>
         <title>Välkommen till brädspelsshoppen!</title>
     </h:head>
-    <!--<h1>Brädspelsshoppen</h1>
-    <h:link outcome="admin.xhtml" value="Admin" />-->
-    <!-- Kundvagn visas på samma sida -->
-    <!--<h:link outcome="cart.xhtml" value="Kundvagn" />-->
-    
     <h:body>
         <b:navBar brand="Brädspelsshopen" brandHref="#" inverse="true">
             <b:navbarLinks>
@@ -25,7 +24,7 @@
                 <b:column col-lg="6" col-md="6" col-xs="12">
                     <b:panel title="Varor">
                         <h:form id="tableForm"> 
-                            <h:dataTable id="mainTable" value="${articleBean.articles}" var="article">
+                            <h:dataTable id="mainTable" value="${articleBean.articles}" var="article" class="table table-striped">
                                 <h:column>
                                     <h:graphicImage url="${article.imageUrl}" />
                                 </h:column>
@@ -43,8 +42,8 @@
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header"></f:facet>
-                                    <h:commandLink id="removeLink" value="Köp" action="${cartBean.addArticle(article)}">
-                                        <f:ajax render="@form" />
+                                    <h:commandLink id="removeLink" action="${cartBean.addArticle(article)}">
+                                        <b:button value="Lägg Till" look="primary"/>
                                     </h:commandLink>
                                 </h:column>
                             </h:dataTable>
@@ -58,13 +57,37 @@
                 <b:column col-lg="6" col-sm="6" col-xs="12">
                     <b:panel title="Kundvagn">
                         <h:form id="cartForm">
-                            <h:dataTable id="cartDataTable" value="${cartBean.cartRows}" var="cart">
+                            <h:dataTable id="cartDataTable" value="${cartBean.cartRows}" var="cart" class="table table-striped">
                                 <h:column>
-                                    <f:facet name="header">#</f:facet>
-                                    <h:outputText value="${cartBean.totalCartRows}"></h:outputText>
+                                    <f:facet name="header">Artikel</f:facet>
+                                    <h:outputText value="${cart.article.name}"/>
                                 </h:column>
-
+                                <h:column>
+                                    <f:facet name="header">Antal</f:facet>
+                                    <h:outputText value="${cart.amount}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Mer/Mindre</f:facet>
+                                    <h:commandLink rendered="${cartBean.cartNotEmpty}" action="${cartBean.increaseItemAmount(cart.article.articleId)}">
+                                        <b:button value="+"/>
+                                        <f:ajax render="@form" execute="@form"/>
+                                    </h:commandLink>
+                                    <h:commandLink rendered="${cartBean.cartNotEmpty}" action="${cartBean.reduceItemAmount(cart.article.articleId)}">
+                                        <b:button value="-"/>
+                                        <f:ajax render="@form" execute="@form"/>
+                                    </h:commandLink>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Ta Bort</f:facet>
+                                    <h:commandLink rendered="${cartBean.cartNotEmpty}" action="${cartBean.removeArticle(cart.article)}">
+                                        <b:button value="Ta Bort" look="danger"/>
+                                        <f:ajax render="@form" execute="@form"/>
+                                    </h:commandLink>
+                                </h:column>
                             </h:dataTable>
+                            <h:commandLink rendered="${cartBean.cartNotEmpty}" action="${cartBean.checkOut()}">
+                                <b:button value="Checka Ut" look="primary"/>
+                            </h:commandLink>
                         </h:form>
                     </b:panel>
                 </b:column>

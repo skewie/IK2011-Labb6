@@ -16,6 +16,7 @@ import java.sql.SQLNonTransientConnectionException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
+import model.AdminOrders;
 import model.Article;
 import model.Order;
 import model.OrderRow;
@@ -214,6 +215,31 @@ public class ArticleDAO implements Serializable {
             stmt.addBatch();
         }
         stmt.executeBatch();
+    }
+    
+    public ArrayList<AdminOrders> getAllOrders(){
+        ArrayList<AdminOrders> orderlist = new ArrayList<>();
+        
+        try{
+            CallableStatement stmt = con.prepareCall(" { call p_getAllOrders } ");
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                AdminOrders a = new AdminOrders();
+                
+                a.setFirstname(rs.getString("firstname"));
+                a.setLastname(rs.getString("lastname"));
+                a.setAmount(rs.getInt("amount"));
+                a.setName(rs.getString("name"));
+                a.setPrice(rs.getInt("price"));
+                
+                orderlist.add(a);
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        
+        return orderlist;
     }
     
 }

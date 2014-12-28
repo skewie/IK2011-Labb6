@@ -13,96 +13,90 @@
         <title>Välkommen till brädspelsshoppen!</title>
     </h:head>
     <h:body>
-        <b:navBar brand="Brädspelsshopen" brandHref="/" inverse="true">
+        <b:navBar brand="Brädspelsshopen" brandHref="./index.xhtml" inverse="true">
             <b:navbarLinks>
                 <b:navLink value="Administration" outcome="admin.xhtml"></b:navLink>          
             </b:navbarLinks>
         </b:navBar>
         <br/>
         <b:container>
-                <b:column col-lg="6" col-md="6" col-xs="12">
-                    <b:panel title="Varor">
-                        <h:form id="tableForm"> 
-                            <h:dataTable id="mainTable" value="${articleBean.articles}" var="article" class="table table-striped">
-                                <h:column>
-                                    <h:graphicImage url="${article.imageUrl}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Namn</f:facet>
-                                    <h:outputText style="" value="${article.name}"></h:outputText>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Publicerad</f:facet>
-                                    <h:outputText value="${article.publishedYear}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Pris</f:facet>
-                                    <h:outputText value="${article.price}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header"></f:facet>
-                                    <h:commandLink action="${cartBean.addArticle(article)}">
-                                        <b:button value="Lägg Till" look="primary"/>
-                                    </h:commandLink>
-                                </h:column>
-                            </h:dataTable>
-                            <h:commandButton rendered="${articleBean.anyItemEditable}" value="Uppdatera alla" action="${articleBean.saveUpdatesAction()}">
-                                <f:ajax render="@form" execute="@form" />
-                            </h:commandButton>
-                        </h:form>
-                    </b:panel>
-                </b:column>
-            
-                <b:column col-lg="6" col-sm="6" col-xs="12">
-                    <b:panel title="Kundvagn">
-                        <h:form id="cartForm">
-                            <h:dataTable id="cartDataTable" value="${cartBean.cartRows}" var="cart" class="table table-striped">
-                                <h:column>
-                                    <f:facet name="header">Artikel</f:facet>
-                                    <h:outputText value="${cart.article.name}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Antal</f:facet>
-                                    <h:outputText value="${cart.amount}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Mer/Mindre</f:facet>
-                                    <h:commandLink rendered="${not cartBean.cartEmpty}" action="${cartBean.increaseItemAmount(cart.article.articleId)}">
-                                        <b:button value="+"/>
-                                        <f:ajax render="@form" execute="@form"/>
-                                    </h:commandLink>
-                                    <h:commandLink rendered="${not cartBean.cartEmpty}" action="${cartBean.reduceItemAmount(cart.article.articleId)}">
-                                        <b:button value="-"/>
-                                        <f:ajax render="@form" execute="@form"/>
-                                    </h:commandLink>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Ta Bort</f:facet>
-                                    <h:commandLink rendered="${not cartBean.cartEmpty}" action="${cartBean.removeArticle(cart.article)}">
-                                        <b:button value="Ta Bort" look="danger"/>
-                                        <f:ajax render="@form" execute="@form"/>
-                                    </h:commandLink>
-                                </h:column>
-                            </h:dataTable>
-                            <h:outputText value="Total Summa: ${cartBean.cartTotalPrice}"/>
-                            <br/>
-                            <br/>
-                            <b:column col-md="4" rendered="${not cartBean.cartEmpty}">
-                                <b:inputText placeholder="Förnamn" value="${order.firstName}"  />
-                            </b:column>
-                            <b:column col-md="4" rendered="${not cartBean.cartEmpty}">
-                                <b:inputText placeholder="Efternamn" value="${order.lastName}"  />
-                            </b:column>
-                            <b:column col-md="4" rendered="${not cartBean.cartEmpty}">
-                                <h:commandLink action="${cartBean.checkOut(order)}">
+            <b:column col-lg="8" col-md="8" col-xs="14">
+                <b:panel title="Varor">
+                    <h:form id="tableForm"> 
+                        <h:dataTable id="mainTable" value="${articleBean.articles}" var="article" class="table table-striped">
+                            <h:column>
+                                <h:graphicImage url="${article.imageUrl}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Namn</f:facet>
+                                <h:outputText style="" value="${article.name}"></h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Publicerad</f:facet>
+                                <h:outputText value="${article.publishedYear}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Pris</f:facet>
+                                <h:outputText value="${article.price}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header"></f:facet>
+                                <b:commandButton value="Lägg Till" id="addItemToCart" look="primary" ajax="true" update="cartForm" action="${cartBean.addArticle(article)}">
+                                    <f:ajax render="cartForm" execute="@form" />
+                                </b:commandButton>
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </b:panel>
+            </b:column>
+
+            <b:column col-lg="4" col-sm="4" col-xs="10">
+                <b:panel title="Kundvagn">
+                    <h:form id="cartForm">
+                        <h:dataTable id="cartDataTable" value="${cartBean.cartRows}" var="cart" class="table table-striped">
+                            <h:column>
+                                <f:facet name="header">Artikel</f:facet>
+                                <h:outputText value="${cart.article.name}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Antal</f:facet>
+                                <b:commandButton id="decreaseAmount" value="-" look="default" size="xs" ajax="true" update="cartForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.reduceItemAmount(cart.article.articleId)}" style="margin-right: 5px">
                                     <f:ajax render="@form" execute="@form" />
-                                    <b:button value="Beställ" look="primary"/>
-                                </h:commandLink>
-                            </b:column>
-                        </h:form>
-                    </b:panel>
-                </b:column>
+                                </b:commandButton>
+                                <h:outputText value="${cart.amount}" style="margin-right: 5px"/>
+
+                                <b:commandButton id="increaseAmount" value="+" look="default" size="xs" ajax="true" update="cartForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.increaseItemAmount(cart.article.articleId)}">
+                                    <f:ajax render="@form" execute="@form" />
+                                </b:commandButton>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Ta Bort</f:facet>
+                                <b:commandButton id="removeRow" value="Ta Bort" look="danger" ajax="true" update="cartForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.removeArticle(cart.article)}">
+                                    <f:ajax render="@form" execute="@form" />
+                                </b:commandButton>
+                            </h:column>
+                        </h:dataTable>
+                        <h:outputText value="Total Summa: ${cartBean.cartTotalPrice}"/>
+                        <br/>
+                        <br/>
+                        <h:outputText rendered="${not cartBean.cartEmpty}" value="Dina Uppgifter:" style="font-size: 1.2em;" />
+
+                        <b:inputText placeholder="Förnamn" value="${order.firstName}" rendered="${not cartBean.cartEmpty}" />
+                        <b:inputText placeholder="Efternamn" value="${order.lastName}" rendered="${not cartBean.cartEmpty}" />
+
+                        <b:commandButton value="Beställ" look="success" ajax="true" update="cartForm" action="${cartBean.checkOut(order)}" rendered="${not cartBean.cartEmpty}" oncomplete="$('#successModal').modal('show');" style="width: 100%;" />
+                    </h:form>
+                </b:panel>
+            </b:column>
+            <b:modal id="successModal" title="Order skickad!">
+                <h:outputText value="Tack för din beställning!" />
+                <f:facet name="footer">
+                    <b:button value="Stäng" dismiss="modal" onclick="return false;"/>
+                    <b:button value="OK" look="primary"/>
+                </f:facet>
+            </b:modal>
         </b:container>
+
     </h:body>
 </html>
 

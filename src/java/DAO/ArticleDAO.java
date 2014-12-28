@@ -191,29 +191,33 @@ public class ArticleDAO implements Serializable {
         return list;
     }
     
-    public void addToOrder(Order order) throws SQLException{
+    public boolean placeOrder(Order order) throws SQLException{
         PreparedStatement orderList = con.prepareStatement(" INSERT INTO order_list (firstname, lastname) VALUES (?, ?) ", Statement.RETURN_GENERATED_KEYS);
         orderList.setString(1, order.getFirstName());
         orderList.setString(2, order.getLastName());
-        
         orderList.executeUpdate();
+        
         ResultSet rs = orderList.getGeneratedKeys();
+        int id = -1;
         
         rs.first();
-        int id = rs.getInt(1);
-
-        System.out.println(id);
-        //lägger till rader till order med nyckel id från orderlist
-        PreparedStatement stmt = con.prepareStatement(" INSERT INTO orderrow (list_id, id, amount) VALUES (?, ?, ?) ");
-        for(OrderRow row : order.getOrderRows()){
-            System.out.println(row.getArticle().getArticleId());
-            System.out.println(row.getAmount());
-            stmt.setInt(1, id);
-            stmt.setInt(2, row.getArticle().getArticleId());
-            stmt.setInt(3, row.getAmount());
-            stmt.addBatch();
+        id = rs.getInt(1);
+        
+        if (id > 0) {
+            //lägger till rader till order med nyckel id från orderlist
+            PreparedStatement stmt = con.prepareStatement(" INSERT INTO orderrow (list_id, id, amount) VALUES (?, ?, ?) ");
+            for(OrderRow row : order.getOrderRows()){
+                stmt.setInt(1, id);
+                stmt.setInt(2, row.getArticle().getArticleId());
+                stmt.setInt(3, row.getAmount());
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+            
         }
-        stmt.executeBatch();
+        
+        con.commit();
+        return true;
     }
     
 }

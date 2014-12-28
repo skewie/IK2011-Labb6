@@ -150,10 +150,13 @@ public class CartBean implements Serializable{
         this.order.setLastName(order.getLastName());
         
         try{
-            dao.addToOrder(this.order);
+            dao.placeOrder(this.order);
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+        order.setFirstName("");
+        order.setLastName("");
+        this.order = new Order(); // återställer kundvagnen.
         return "";
     }
     

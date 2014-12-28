@@ -24,11 +24,11 @@ import model.OrderRow;
 @SessionScoped
 public class CartBean implements Serializable{
     
-    private final ArrayList<OrderRow> cartRows;
+    private Order order;
     private ArticleDAO dao;
     
     public CartBean() {
-        cartRows = new ArrayList();
+        order = new Order();
         try {
             dao = ArticleDAO.getInstance();
         } catch (Exception e) {
@@ -40,40 +40,37 @@ public class CartBean implements Serializable{
         }
     }
 
-    public CartBean(ArrayList<OrderRow> cartRows) {
-        this.cartRows = cartRows;
-    }
+    /*public CartBean(ArrayList<OrderRow> order.getOrderRows()) {
+        this.order.getOrderRows() = order.getOrderRows();
+    }*/
 
     public ArrayList<OrderRow> getCartRows() {
-        return cartRows;
+        return order.getOrderRows();
     }
 
     public void addArticle(Article article) {
         if (inCart(article.getArticleId())) {
             increaseItemAmount(article.getArticleId());
         } else {
-            cartRows.add(new OrderRow(article));
+            order.add(new OrderRow(article));
         }
     }
     
     public void removeArticle(Article article) {
-        System.out.println("removing: " + article.getName());
         int index = 0;
-        System.out.println("cart size: " + cartRows.size());
         if ((index = getArticleIndex(article)) != -1) {
-            System.out.println("found it!");
-            cartRows.remove(index);
+            order.remove(index);
         }else{
             System.out.println("pointing at index: " + index);
         }
     }
     
     public int getTotalCartRows() {
-        return cartRows.size();
+        return order.getOrderRows().size();
     }
     
     public boolean inCart(int articleId) {
-        for (OrderRow row : cartRows) {
+        for (OrderRow row : order.getOrderRows()) {
             if (row.getArticle().getArticleId() == articleId) {
                 return true;
             }
@@ -83,15 +80,15 @@ public class CartBean implements Serializable{
     }
     
     private int getArticleIndex(Article article) {
-        for (int i = 0; i < cartRows.size(); i++) 
-            if (cartRows.get(i).getArticle().getArticleId() == article.getArticleId())
+        for (int i = 0; i < order.getOrderRows().size(); i++) 
+            if (order.getOrderRows().get(i).getArticle().getArticleId() == article.getArticleId())
                 return i;
         
         return -1;
     }
     
     public void increaseItemAmount(int articleId) {
-        for (OrderRow row : cartRows) {
+        for (OrderRow row : order.getOrderRows()) {
             if (row.getArticle().getArticleId() == articleId) {
                 row.increaseAmount();
                 break;
@@ -100,11 +97,11 @@ public class CartBean implements Serializable{
     }
     
     public void reduceItemAmount(int articleId) {
-        for (OrderRow row : cartRows) {
+        for (OrderRow row : order.getOrderRows()) {
             if (row.getArticle().getArticleId() == articleId) {
                 row.reduceAmount();
                 if(row.getAmount() <= 0)
-                    cartRows.remove(row);
+                    order.getOrderRows().remove(row);
                 break;
             }
         }
@@ -114,7 +111,7 @@ public class CartBean implements Serializable{
         if (amount <= 0) { // Reduceras det till noll eller mindre tar vi bort varan helt.
             removeArticle(article);
         } else {
-            for (OrderRow row : cartRows) {
+            for (OrderRow row : order.getOrderRows()) {
                 if (row.getArticle().getArticleId() == article.getArticleId()) {
                     row.setAmount(amount);
                     break;
@@ -126,7 +123,7 @@ public class CartBean implements Serializable{
     public int getCartTotalItems() {
         int tot = 0;
         
-        for (OrderRow row : cartRows) {
+        for (OrderRow row : order.getOrderRows()) {
             tot += row.getAmount();
         }
         
@@ -136,19 +133,28 @@ public class CartBean implements Serializable{
     public String getCartTotalPrice() {
         double tot = 0.0;
         
-        for (OrderRow row : cartRows) {
+        for (OrderRow row : order.getOrderRows()) {
             tot += row.getAmount() * row.getArticle().getPrice();
         }
         
         return NumberFormat.getCurrencyInstance().format(tot);
     }
     
-    public boolean isCartNotEmpty(){
-        if(cartRows.isEmpty() == true){
-            return false;
-        }else{
-            return true;
+    public boolean isCartEmpty(){
+        return order.getOrderRows().isEmpty();
+    }
+    
+    public String checkOut(Order order) {
+        
+        this.order.setFirstName(order.getFirstName());
+        this.order.setLastName(order.getLastName());
+        
+        try{
+            dao.addToOrder(this.order);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
         }
+        return "";
     }
     
 }

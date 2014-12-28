@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
 import model.Article;
@@ -191,27 +192,28 @@ public class ArticleDAO implements Serializable {
     }
     
     public void addToOrder(Order order) throws SQLException{
-        PreparedStatement orderList = con.prepareStatement(" INSERT INTO order_list (firstname, lastname) VALUES (?, ?) ");
+        PreparedStatement orderList = con.prepareStatement(" INSERT INTO order_list (firstname, lastname) VALUES (?, ?) ", Statement.RETURN_GENERATED_KEYS);
         orderList.setString(1, order.getFirstName());
         orderList.setString(2, order.getLastName());
         
-        PreparedStatement getId = con.prepareStatement(" SELECT list_id FROM order_list ORDER BY list_id DESC LIMIT 1 ");
-        ResultSet rs = getId.executeQuery();
+        orderList.executeUpdate();
+        ResultSet rs = orderList.getGeneratedKeys();
         
-        int id = 0;
-        while(rs.next()){
-            id = rs.getInt("list_id");
-        }
-       
+        rs.first();
+        int id = rs.getInt(1);
+
+        System.out.println(id);
         //lägger till rader till order med nyckel id från orderlist
         PreparedStatement stmt = con.prepareStatement(" INSERT INTO orderrow (list_id, id, amount) VALUES (?, ?, ?) ");
-        for(OrderRow row : order.getOrderRow()){
+        for(OrderRow row : order.getOrderRows()){
+            System.out.println(row.getArticle().getArticleId());
+            System.out.println(row.getAmount());
             stmt.setInt(1, id);
             stmt.setInt(2, row.getArticle().getArticleId());
             stmt.setInt(3, row.getAmount());
             stmt.addBatch();
         }
-        stmt.executeQuery();
+        stmt.executeBatch();
     }
     
 }

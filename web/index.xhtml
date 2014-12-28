@@ -13,9 +13,8 @@
         <title>Välkommen till brädspelsshoppen!</title>
     </h:head>
     <h:body>
-        <b:navBar brand="Brädspelsshopen" brandHref="#" inverse="true">
+        <b:navBar brand="Brädspelsshopen" brandHref="/" inverse="true">
             <b:navbarLinks>
-                <b:navLink value="Huvudsidan" href="./"></b:navLink>
                 <b:navLink value="Administration" outcome="admin.xhtml"></b:navLink>          
             </b:navbarLinks>
         </b:navBar>
@@ -42,7 +41,7 @@
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header"></f:facet>
-                                    <h:commandLink id="removeLink" action="${cartBean.addArticle(article)}">
+                                    <h:commandLink action="${cartBean.addArticle(article)}">
                                         <b:button value="Lägg Till" look="primary"/>
                                     </h:commandLink>
                                 </h:column>
@@ -68,18 +67,18 @@
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Mer/Mindre</f:facet>
-                                    <h:commandLink rendered="${cartBean.cartNotEmpty}" action="${cartBean.increaseItemAmount(cart.article.articleId)}">
+                                    <h:commandLink rendered="${not cartBean.cartEmpty}" action="${cartBean.increaseItemAmount(cart.article.articleId)}">
                                         <b:button value="+"/>
                                         <f:ajax render="@form" execute="@form"/>
                                     </h:commandLink>
-                                    <h:commandLink rendered="${cartBean.cartNotEmpty}" action="${cartBean.reduceItemAmount(cart.article.articleId)}">
+                                    <h:commandLink rendered="${not cartBean.cartEmpty}" action="${cartBean.reduceItemAmount(cart.article.articleId)}">
                                         <b:button value="-"/>
                                         <f:ajax render="@form" execute="@form"/>
                                     </h:commandLink>
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Ta Bort</f:facet>
-                                    <h:commandLink rendered="${cartBean.cartNotEmpty}" action="${cartBean.removeArticle(cart.article)}">
+                                    <h:commandLink rendered="${not cartBean.cartEmpty}" action="${cartBean.removeArticle(cart.article)}">
                                         <b:button value="Ta Bort" look="danger"/>
                                         <f:ajax render="@form" execute="@form"/>
                                     </h:commandLink>
@@ -88,14 +87,15 @@
                             <h:outputText value="Total Summa: ${cartBean.cartTotalPrice}"/>
                             <br/>
                             <br/>
-                            <b:column col-md="4" rendered="${cartBean.cartNotEmpty}">
+                            <b:column col-md="4" rendered="${not cartBean.cartEmpty}">
                                 <b:inputText placeholder="Förnamn" value="${order.firstName}"  />
                             </b:column>
-                            <b:column col-md="4" rendered="${cartBean.cartNotEmpty}">
+                            <b:column col-md="4" rendered="${not cartBean.cartEmpty}">
                                 <b:inputText placeholder="Efternamn" value="${order.lastName}"  />
                             </b:column>
-                            <b:column col-md="4" rendered="${cartBean.cartNotEmpty}">
-                                <h:commandLink action="${order.checkOut()}">
+                            <b:column col-md="4" rendered="${not cartBean.cartEmpty}">
+                                <h:commandLink action="${cartBean.checkOut(order)}">
+                                    <f:ajax render="@form" execute="@form" />
                                     <b:button value="Beställ" look="primary"/>
                                 </h:commandLink>
                             </b:column>

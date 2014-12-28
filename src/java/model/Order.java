@@ -33,15 +33,15 @@ public class Order implements Serializable{
     }
     
     public Order(){
-        try {
-            dao = ArticleDAO.getInstance();
-        } catch (Exception e) {
-            System.out.println(e.getClass()+" - "+e.getMessage());
-            System.out.println("StackTrace:");
-            for (StackTraceElement ste : e.getStackTrace()) {
-                System.out.println(ste.toString());
-            }
-        }
+        rows = new ArrayList();
+    }
+    
+    public void add(OrderRow row) {
+        rows.add(row);
+    }
+    
+    public void remove(int index) {
+        rows.remove(index);
     }
     
     public void setFirstName(String fname){
@@ -64,22 +64,7 @@ public class Order implements Serializable{
         this.rows = rows;
     }
     
-    public ArrayList<OrderRow> getOrderRow(){
+    public ArrayList<OrderRow> getOrderRows(){
         return this.rows;
     }
-    
-        public String checkOut(){
-        try{
-            //add array to order
-            CartBean cb = new CartBean();
-            Order order = new Order(getFirstName(), getLastName(), cb.getCartRows());
-            
-            dao.addToOrder(order);
-            //cartRows.clear();
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return "";
-    }
-    
 }

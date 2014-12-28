@@ -6,6 +6,9 @@
 package model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -13,7 +16,7 @@ import java.io.Serializable;
  */
 public class AdminOrders implements Serializable{
     
-    private String firstname, lastname, name;
+    private String firstname, lastname, name, date;
     private int amount;
     private double price;
     
@@ -68,5 +71,18 @@ public class AdminOrders implements Serializable{
     
     public double getPrice(){
         return this.price;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDate() {
+        try {
+        Date dateObj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS").parse(this.date);
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(dateObj);
+        } catch(ParseException e) {
+            return this.date;
+        }
     }
 }

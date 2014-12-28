@@ -236,6 +236,8 @@ public class ArticleDAO implements Serializable {
                 a.setAmount(rs.getInt("amount"));
                 a.setName(rs.getString("name"));
                 a.setPrice(rs.getInt("price"));
+                a.setDate(rs.getString("orderdate"));
+                
                 
                 orderlist.add(a);
             }

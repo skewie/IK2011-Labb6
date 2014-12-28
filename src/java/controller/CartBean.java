@@ -183,5 +183,4 @@ public class CartBean implements Serializable{
         if (value.equals(""))
             MessageHandler.throwErrorMessage(context, ErrorMessage.EMPTY_FIELD);
     }
-    
 }

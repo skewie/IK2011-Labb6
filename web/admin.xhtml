@@ -20,22 +20,31 @@
                 <h:dataTable id="mainTable" value="${articleBean.articles}" var="article" class="table table-striped">
                     <h:column>
                         <f:facet name="header">Namn</f:facet>
-                        <h:inputText value="${article.name}" rendered="${article.editable}" size="10"></h:inputText>
+                        <h:inputText id="updateFormName" value="${article.name}" rendered="${article.editable}" size="10" validator="${article.validateName}">
+                            <f:ajax event="blur" render="updateFormNameError" />
+                        </h:inputText>
+                        <h:message for="updateFormName" id="updateFormNameError" style="color:red" />
                         <h:outputText value="${article.name}" rendered="${not article.editable}"></h:outputText>
                     </h:column>
                     <h:column>
                         <f:facet name="header">Publicerad</f:facet>
-                        <h:inputText value="${article.publishedYear}" rendered="${article.editable}" size="4"/>
+                        <h:inputText id="updateFormPublishedYear" value="${article.publishedYear}" rendered="${article.editable}" size="4" validator="${article.validatePublishedYear}">
+                            <f:ajax event="blur" render="updateFormPublishedYearError" />
+                        </h:inputText>
+                        <h:message for="updateFormPublishedYear" id="updateFormPublishedYearError" style="color:red" />
                         <h:outputText value="${article.publishedYear}" rendered="${not article.editable}" />
                     </h:column>
                     <h:column>
                         <f:facet name="header">Pris</f:facet>
-                        <h:inputText value="${article.price}" rendered="${article.editable}" size="4"/>
+                        <h:inputText id="updateFormPrice" value="${article.price}" rendered="${article.editable}" size="4">
+                            <f:ajax event="blur" render="updateFormPriceError" />
+                        </h:inputText>
+                        <h:message for="updateFormPrice" id="updateFormPriceError" style="color:red" />
                         <h:outputText value="${article.price}" rendered="${not article.editable}" />
                     </h:column>
                     <h:column>
                         <f:facet name="header">Bild URL</f:facet>
-                        <h:inputText value="${article.imageUrl}" rendered="${article.editable}" size="10"/>
+                        <h:inputText value="${article.imageUrl}" rendered="${article.editable}" size="10" style="width:100%;"/>
                         <h:outputText value="${article.imageUrl}" rendered="${not article.editable}" />
                     </h:column>
                     <h:column>
@@ -115,6 +124,10 @@
                     <h:column>
                         <f:facet name="header">Pris/st</f:facet>
                         <h:outputText value="${adminorder.price}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Orderdatum</f:facet>
+                        <h:outputText value="${adminorder.date}"/>
                     </h:column>
                 </h:dataTable>
             </h:form>

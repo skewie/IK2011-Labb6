@@ -56,15 +56,16 @@
                         <h:dataTable id="cartDataTable" value="${cartBean.cartRows}" var="cart" class="table table-striped">
                             <h:column>
                                 <f:facet name="header">Artikel</f:facet>
-                                <h:outputText value="${cart.article.name}"/>
+                                <h:outputText title="${cart.article.name}" value="${cart.article.name.length() gt 18 ? cart.article.name.substring(0, 15).concat('...') : cart.article.name}"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Antal</f:facet>
-                                <b:commandButton id="decreaseAmount" value="-" look="default" size="xs" ajax="true" update="cartForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.reduceItemAmount(cart.article.articleId)}" style="margin-right: 5px">
+                                <b:commandButton id="decreaseAmount" value="-" look="default" size="xs" ajax="true" update="cartForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.reduceItemAmount(cart.article.articleId)}"  style="margin-right: 5px;" >
                                     <f:ajax render="@form" execute="@form" />
                                 </b:commandButton>
-                                <h:outputText value="${cart.amount}" style="margin-right: 5px"/>
-
+                                
+                                <h:outputText value="${cart.amount}" style="margin-right: 5px;" />
+                                
                                 <b:commandButton id="increaseAmount" value="+" look="default" size="xs" ajax="true" update="cartForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.increaseItemAmount(cart.article.articleId)}">
                                     <f:ajax render="@form" execute="@form" />
                                 </b:commandButton>

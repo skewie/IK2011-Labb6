@@ -20,22 +20,22 @@
                 <h:dataTable id="mainTable" value="${articleBean.articles}" var="article" class="table table-striped">
                     <h:column>
                         <f:facet name="header">Namn</f:facet>
-                        <h:inputText value="${article.name}" rendered="${article.editable}" ></h:inputText>
+                        <h:inputText value="${article.name}" rendered="${article.editable}" size="10"></h:inputText>
                         <h:outputText value="${article.name}" rendered="${not article.editable}"></h:outputText>
                     </h:column>
                     <h:column>
                         <f:facet name="header">Publicerad</f:facet>
-                        <h:inputText value="${article.publishedYear}" rendered="${article.editable}" />
+                        <h:inputText value="${article.publishedYear}" rendered="${article.editable}" size="4"/>
                         <h:outputText value="${article.publishedYear}" rendered="${not article.editable}" />
                     </h:column>
                     <h:column>
                         <f:facet name="header">Pris</f:facet>
-                        <h:inputText value="${article.price}" rendered="${article.editable}" />
+                        <h:inputText value="${article.price}" rendered="${article.editable}" size="4"/>
                         <h:outputText value="${article.price}" rendered="${not article.editable}" />
                     </h:column>
                     <h:column>
                         <f:facet name="header">Bild URL</f:facet>
-                        <h:inputText value="${article.imageUrl}" rendered="${article.editable}" />
+                        <h:inputText value="${article.imageUrl}" rendered="${article.editable}" size="10"/>
                         <h:outputText value="${article.imageUrl}" rendered="${not article.editable}" />
                     </h:column>
                     <h:column>
@@ -94,6 +94,30 @@
             </h:form>
 
             <h2>Lagda ordrar</h2>
+            <h:form>
+                <h:dataTable id="orderTable" value="${cartBean.allOrders}" var="adminorder" class="table table-striped">
+                    <h:column>
+                        <f:facet name="header">Förnamn</f:facet>
+                        <h:outputText value="${adminorder.firstname}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Efternamn</f:facet>
+                        <h:outputText value="${adminorder.lastname}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Artikel</f:facet>
+                        <h:outputText value="${adminorder.name}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Mängd</f:facet>
+                        <h:outputText value="${adminorder.amount}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Pris/st</f:facet>
+                        <h:outputText value="${adminorder.price}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
         </b:container>
     </h:body>
 </html>

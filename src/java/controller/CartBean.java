@@ -12,9 +12,14 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import model.AdminOrders;
 import model.Article;
 import model.Order;
 import model.OrderRow;
+import util.messages.ErrorMessage;
+import util.messages.MessageHandler;
 
 /**
  *
@@ -158,6 +163,25 @@ public class CartBean implements Serializable{
         order.setLastName("");
         this.order = new Order(); // återställer kundvagnen.
         return "";
+    }
+    
+    public ArrayList<AdminOrders> getAllOrders(){
+        return dao.getAllOrders();
+    }
+    
+    public void validateFirstName(FacesContext context, UIComponent uic, Object value){
+        String val = prepareStringValue(value);
+        performBasicValidation(context, uic, value);
+    }
+    
+    private String prepareStringValue(Object value) {
+        String val = (String)value;
+        return val.trim();
+    }
+    
+    private void performBasicValidation(FacesContext context, UIComponent uic, Object value) {
+        if (value.equals(""))
+            MessageHandler.throwErrorMessage(context, ErrorMessage.EMPTY_FIELD);
     }
     
 }

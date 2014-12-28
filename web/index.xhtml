@@ -88,17 +88,17 @@
                             <h:outputText value="Total Summa: ${cartBean.cartTotalPrice}"/>
                             <br/>
                             <br/>
-                                <b:column col-md="4">
-                                    <b:inputText placeholder="Förnamn" value="${order.firstName}"  />
-                                </b:column>
-                                <b:column col-md="4">
-                                    <b:inputText placeholder="Efternamn" value="${order.lastName}"  />
-                                </b:column>
-                                <b:column col-md="4">
-                                    <h:commandLink rendered="${cartBean.cartNotEmpty}" action="${order.checkOut()}">
-                                        <b:button value="Beställ" look="primary"/>
-                                    </h:commandLink>
-                                </b:column>
+                            <b:column col-md="4" rendered="${cartBean.cartNotEmpty}">
+                                <b:inputText placeholder="Förnamn" value="${order.firstName}"  />
+                            </b:column>
+                            <b:column col-md="4" rendered="${cartBean.cartNotEmpty}">
+                                <b:inputText placeholder="Efternamn" value="${order.lastName}"  />
+                            </b:column>
+                            <b:column col-md="4" rendered="${cartBean.cartNotEmpty}">
+                                <h:commandLink action="${order.checkOut()}">
+                                    <b:button value="Beställ" look="primary"/>
+                                </h:commandLink>
+                            </b:column>
                         </h:form>
                     </b:panel>
                 </b:column>

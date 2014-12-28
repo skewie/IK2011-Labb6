@@ -26,7 +26,7 @@ public class Order implements Serializable{
     private ArrayList<OrderRow> rows;
     private ArticleDAO dao;
     
-    public Order(String firsName, String lastName,ArrayList<OrderRow> row){
+    public Order(String firsName, String lastName, ArrayList<OrderRow> row){
         this.firstName = firsName;
         this.lastName = lastName;
         this.rows = row;
@@ -71,11 +71,9 @@ public class Order implements Serializable{
         public String checkOut(){
         try{
             //add array to order
-            Order order = new Order();
             CartBean cb = new CartBean();
-            order.setFirstName(firstName);
-            order.setLastName(lastName);
-            order.setOrderRow(cb.getCartRows());
+            Order order = new Order(getFirstName(), getLastName(), cb.getCartRows());
+            
             dao.addToOrder(order);
             //cartRows.clear();
         }catch(SQLException e){

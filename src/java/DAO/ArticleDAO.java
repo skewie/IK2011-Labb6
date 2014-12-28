@@ -194,8 +194,15 @@ public class ArticleDAO implements Serializable {
         PreparedStatement orderList = con.prepareStatement(" INSERT INTO order_list (firstname, lastname) VALUES (?, ?) ");
         orderList.setString(1, order.getFirstName());
         orderList.setString(2, order.getLastName());
-        ResultSet rs = orderList.executeQuery();
-        int id = rs.getInt("list_id");
+        
+        PreparedStatement getId = con.prepareStatement(" SELECT list_id FROM order_list ORDER BY list_id DESC LIMIT 1 ");
+        ResultSet rs = getId.executeQuery();
+        
+        int id = 0;
+        while(rs.next()){
+            id = rs.getInt("list_id");
+        }
+       
         //lägger till rader till order med nyckel id från orderlist
         PreparedStatement stmt = con.prepareStatement(" INSERT INTO orderrow (list_id, id, amount) VALUES (?, ?, ?) ");
         for(OrderRow row : order.getOrderRow()){

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import model.Article;
+import model.Order;
 import model.OrderRow;
 
 /**
@@ -140,16 +141,6 @@ public class CartBean implements Serializable{
         }
         
         return NumberFormat.getCurrencyInstance().format(tot);
-    }
-    
-    public String checkOut(){
-        try{
-            dao.addToOrder(cartRows);
-            //cartRows.clear();
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return "";
     }
     
     public boolean isCartNotEmpty(){

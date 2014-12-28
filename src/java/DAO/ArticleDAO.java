@@ -16,6 +16,7 @@ import java.sql.SQLNonTransientConnectionException;
 import java.util.ArrayList;
 import java.util.Random;
 import model.Article;
+import model.Order;
 import model.OrderRow;
 
 /**
@@ -189,23 +190,21 @@ public class ArticleDAO implements Serializable {
         return list;
     }
     
-    public void addToOrder(ArrayList<OrderRow> orderrow) throws SQLException{
-        //skapar nyckel id rad till orderlist
-        //temp test innan username
-        Random rnd = new Random();
-        int id = rnd.nextInt(10000)+1;
-        
-        PreparedStatement orderListId = con.prepareStatement(" INSERT INTO order_list (list_id) VALUES ("+id+") ");
-        orderListId.executeQuery();
-
+    public void addToOrder(Order order) throws SQLException{
+        PreparedStatement orderList = con.prepareStatement(" INSERT INTO order_list (firstname, lastname) VALUES (?, ?) ");
+        orderList.setString(1, order.getFirstName());
+        orderList.setString(2, order.getLastName());
+        ResultSet rs = orderList.executeQuery();
+        int id = rs.getInt("list_id");
         //lägger till rader till order med nyckel id från orderlist
-        for(OrderRow row : orderrow){
-            PreparedStatement stmt = con.prepareStatement(" INSERT INTO orderrow (list_id, id, amount) VALUES (?, ?, ?) ");
+        PreparedStatement stmt = con.prepareStatement(" INSERT INTO orderrow (list_id, id, amount) VALUES (?, ?, ?) ");
+        for(OrderRow row : order.getOrderRow()){
             stmt.setInt(1, id);
             stmt.setInt(2, row.getArticle().getArticleId());
             stmt.setInt(3, row.getAmount());
-            stmt.executeQuery();
+            stmt.addBatch();
         }
+        stmt.executeQuery();
     }
     
 }

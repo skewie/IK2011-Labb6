@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Random;
 import model.AdminOrders;
 import model.Article;
 import model.Order;
@@ -40,13 +39,6 @@ public class ArticleDAO implements Serializable {
         return instance;
     }
 
-    /*public ArticleDAO() {
-     try {
-     connect();
-     } catch(Exception e) {
-            
-     }
-     }*/
     private ArticleDAO() throws SQLException {
         connect();
     }

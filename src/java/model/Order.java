@@ -24,7 +24,6 @@ public class Order implements Serializable{
     private String firstName;
     private String lastName;
     private ArrayList<OrderRow> rows;
-    private ArticleDAO dao;
     
     public Order(String firsName, String lastName, ArrayList<OrderRow> row){
         this.firstName = firsName;

@@ -77,7 +77,7 @@ public class Article implements Serializable {
     
     public void validatePrice(FacesContext context, UIComponent uic, Object value) {
         if (value == null)
-            return;
+            MessageHandler.throwErrorMessage(context, ErrorMessage.EMPTY_FIELD);
         
         try {
             if ((Double)value < 0)

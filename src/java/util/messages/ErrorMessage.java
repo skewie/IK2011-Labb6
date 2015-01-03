@@ -15,7 +15,7 @@ public enum ErrorMessage {
     NOT_A_YEAR("notYear"),
     NEGATIVE_NUMBER("negativeNumber");
     
-    private String value;
+    private final String value;
     private ErrorMessage(String value) {
         this.value = value;
     }

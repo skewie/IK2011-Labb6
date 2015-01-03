@@ -11,6 +11,30 @@
     -->
     <h:head>
         <title>Välkommen till brädspelsshoppen!</title>
+        <script type="text/javascript">
+            
+            /**
+             * 
+             * Superfullösningen för att visa popupen vid Order Success
+             * 
+             * BootFaces inkluderar ett "oncomplete"-event för ajax. Men den returneras alltid som successful, även om valideringen för namnfälten misslyckades.
+             * Därför gör vi denna fullösning för att testa retursträngen om ett fel inträffade.
+             * 
+             * Att lösa det på detta sättet är såklart inte att rekommenderas!
+             * 
+             * @returns {undefined}
+             * 
+             */
+            function displayModal() {
+            
+                var str = $('#orderForm').html().toString();
+
+                if (str.indexOf(": Validation Error:") === -1) // indexOf returnerar -1 om den inte kunde hitta ett index för substrängen.
+                    $('#successModal').modal('show');          
+
+            }
+            
+        </script>
     </h:head>
     <h:body>
         <b:navBar brand="Brädspelsshopen" brandHref="./index.xhtml" inverse="true">
@@ -41,9 +65,7 @@
                             </h:column>
                             <h:column>
                                 <f:facet name="header"></f:facet>
-                                <b:commandButton value="Lägg Till" id="addItemToCart" look="primary" ajax="true" update="cartForm" action="${cartBean.addArticle(article)}">
-                                    <f:ajax render="cartForm" execute="@form" />
-                                </b:commandButton>
+                                <b:commandButton value="Lägg Till" id="addItemToCart" look="primary" ajax="true" update="cartForm orderForm" action="${cartBean.addArticle(article)}" />
                             </h:column>
                         </h:dataTable>
                     </h:form>
@@ -60,33 +82,39 @@
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Antal</f:facet>
-                                <b:commandButton id="decreaseAmount" value="-" look="default" size="xs" ajax="true" update="cartForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.reduceItemAmount(cart.article.articleId)}"  style="margin-right: 5px;" >
-                                    <f:ajax render="@form" execute="@form" />
-                                </b:commandButton>
+                                <b:commandButton id="decreaseAmount" value="-" look="default" size="xs" ajax="true" update="cartForm orderForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.reduceItemAmount(cart.article.articleId)}"  style="margin-right: 5px;"  />
                                 
                                 <h:outputText value="${cart.amount}" style="margin-right: 5px;" />
                                 
-                                <b:commandButton id="increaseAmount" value="+" look="default" size="xs" ajax="true" update="cartForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.increaseItemAmount(cart.article.articleId)}">
-                                    <f:ajax render="@form" execute="@form" />
-                                </b:commandButton>
+                                <b:commandButton id="increaseAmount" value="+" look="default" size="xs" ajax="true" update="cartForm orderForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.increaseItemAmount(cart.article.articleId)}" />
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Ta Bort</f:facet>
-                                <b:commandButton id="removeRow" value="Ta Bort" look="danger" ajax="true" update="cartForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.removeArticle(cart.article)}">
+                                <b:commandButton id="removeRow" value="Ta Bort" look="danger" ajax="true" update="cartForm orderForm" rendered="${not cartBean.cartEmpty}" action="${cartBean.removeArticle(cart.article)}">
                                     <f:ajax render="@form" execute="@form" />
                                 </b:commandButton>
                             </h:column>
                         </h:dataTable>
                         <h:outputText value="Total Summa: ${cartBean.cartTotalPrice}"/>
-                        <br/>
-                        <br/>
+                    </h:form>
+                    <br/>
+                    <br/>
+                    <h:form id="orderForm">
+
                         <h:outputText rendered="${not cartBean.cartEmpty}" value="Dina Uppgifter:" style="font-size: 1.2em;" />
 
-                        <b:inputText placeholder="Förnamn" value="${order.firstName}" rendered="${not cartBean.cartEmpty}" />
-                        <b:inputText placeholder="Efternamn" value="${order.lastName}" rendered="${not cartBean.cartEmpty}" />
+                        <b:inputText id="orderFirstName" placeholder="Förnamn" value="${order.firstName}" rendered="${not cartBean.cartEmpty}" required="true">
+                        </b:inputText>
+                        <h:message for="orderFirstName" style="color: darkred" />
+                        <b:inputText id="orderLastName" placeholder="Efternamn" value="${order.lastName}" rendered="${not cartBean.cartEmpty}" required="true">
+                        </b:inputText>
+                        <h:message for="orderLastName" style="color: darkred;" />
 
-                        <b:commandButton value="Beställ" look="success" ajax="true" update="cartForm" action="${cartBean.checkOut(order)}" rendered="${not cartBean.cartEmpty}" oncomplete="$('#successModal').modal('show');" style="width: 100%;" />
+                        <b:commandButton value="Beställ" look="success" ajax="true" update="orderForm" action="${cartBean.checkOut(order)}" rendered="${not cartBean.cartEmpty}" oncomplete="displayModal();" style="width: 100%;" />
+                        <br />
                     </h:form>
+                        
+                    
                 </b:panel>
             </b:column>
             <b:modal id="successModal" title="Order skickad!">

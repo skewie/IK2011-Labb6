@@ -168,19 +168,4 @@ public class CartBean implements Serializable{
     public ArrayList<AdminOrders> getAllOrders(){
         return dao.getAllOrders();
     }
-    
-    public void validateFirstName(FacesContext context, UIComponent uic, Object value){
-        String val = prepareStringValue(value);
-        performBasicValidation(context, uic, value);
-    }
-    
-    private String prepareStringValue(Object value) {
-        String val = (String)value;
-        return val.trim();
-    }
-    
-    private void performBasicValidation(FacesContext context, UIComponent uic, Object value) {
-        if (value.equals(""))
-            MessageHandler.throwErrorMessage(context, ErrorMessage.EMPTY_FIELD);
-    }
 }

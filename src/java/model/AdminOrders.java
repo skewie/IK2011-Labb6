@@ -79,8 +79,8 @@ public class AdminOrders implements Serializable{
 
     public String getDate() {
         try {
-        Date dateObj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS").parse(this.date);
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(dateObj);
+            Date dateObj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS").parse(this.date);
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(dateObj);
         } catch(ParseException e) {
             return this.date;
         }
